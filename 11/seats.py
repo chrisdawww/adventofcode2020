@@ -44,7 +44,6 @@ def adjacents_occupied(i, j, seats):
 
 def part2(seats):
     seats_changed = -1
-    a = 0
     while seats_changed != 0:
         seats_changed = 0
 
@@ -70,75 +69,19 @@ def part2(seats):
 
 def visible_occupied(i, j, seats):
     occupied = 0
-    # check up
-    for y in range(i-1, -1, -1):
-        if seats[y][j] == '#':
-            occupied += 1
-            break
-        if seats[y][j] == 'L':
-            break
-    # check down
-    for y in range(i+1, len(seats)):
-        if seats[y][j] == '#':
-            occupied += 1
-            break
-        if seats[y][j] == 'L':
-            break
-    # check left
-    for x in range(j-1, -1, -1):
-        if seats[i][x] == '#':
-            occupied += 1
-            break
-        if seats[i][x] == 'L':
-            break
-    # check right
-    for x in range(j+1, len(seats[0])):
-        if seats[i][x] == '#':
-            occupied += 1
-            break
-        if seats[i][x] == 'L':
-            break
-
-    # check diag up right
-    pairs = [(i-d,j+d) for d in range(min(i+1, len(seats[0])-j))]
-    if (i,j) in pairs:
-        del pairs[pairs.index((i,j))]
-    for x,y in pairs:
-        if seats[x][y] == '#':
-            occupied += 1
-            break
-        if seats[x][y] == 'L':
-            break
-    # check diag up left
-    pairs = [(i-d,j-d) for d in range(min(i+1, j+1))]
-    if (i,j) in pairs:
-        del pairs[pairs.index((i,j))]
-    for x,y in pairs:
-        if seats[x][y] == '#':
-            occupied += 1
-            break
-        if seats[x][y] == 'L':
-            break
-    # check diag down right
-    pairs = [(i+d,j+d) for d in range(min(len(seats)-i, len(seats[0])-j))]
-    if (i,j) in pairs:
-        del pairs[pairs.index((i,j))]
-    for x,y in pairs:
-        if seats[x][y] == '#':
-            occupied += 1
-            break
-        if seats[x][y] == 'L':
-            break
-    # check diag down left
-    pairs = [(i+d,j-d) for d in range(min(len(seats)-i, j+1))]
-    if (i,j) in pairs:
-        del pairs[pairs.index((i,j))]
-    for x,y in pairs:
-        if seats[x][y] == '#':
-            occupied += 1
-            break
-        if seats[x][y] == 'L':
-            break
+    directions = [[1,0], [1,1], [0,1], [-1,1], [-1,0], [-1,-1], [0,-1], [1, -1]]
+    for direction in directions:
+        temp_i, temp_j = i, j
+        while True:
+            temp_i += direction[1]
+            temp_j += direction[0]
+            if temp_i<0 or temp_j<0 or temp_i>=len(seats) or temp_j>=len(seats[0]):
+                break
+            if seats[temp_i][temp_j] == '#':
+                occupied += 1
+                break
+            if seats[temp_i][temp_j] == 'L':
+                break
 
     return occupied
 
